@@ -22,7 +22,7 @@ namespace Shop.Controllers
 
         public IActionResult Test()
         {
-            return Json(null);
+            return View();
         }
 
         // GET: Product
