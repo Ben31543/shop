@@ -20,6 +20,11 @@ namespace Shop.Controllers
             _productRepository = productRepository;
         }
 
+        public IActionResult Test()
+        {
+            return Json(null);
+        }
+
         // GET: Product
         public async Task<IActionResult> Index(string searchString, int page = 1)
         {
