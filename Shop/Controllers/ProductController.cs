@@ -20,11 +20,6 @@ namespace Shop.Controllers
             _productRepository = productRepository;
         }
 
-        public IActionResult Test()
-        {
-            return View();
-        }
-
         // GET: Product
         public async Task<IActionResult> Index(string searchString, int page = 1)
         {
