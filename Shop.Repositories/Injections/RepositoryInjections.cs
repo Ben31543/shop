@@ -12,6 +12,7 @@ namespace Shop.Repositories.Injections
         public static void AddRepositoryInjections(this IServiceCollection services)
         {
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
     }
 }

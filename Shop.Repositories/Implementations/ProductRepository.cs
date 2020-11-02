@@ -88,5 +88,10 @@ namespace Shop.Repositories.Implementations
             }
             return foundProducts;
         }
+
+        public async Task<IEnumerable<ProductModel>> GetAllWithCategories()
+        {
+            return await _context.Product.Include(x => x.Category).ToListAsync();
+        }
     }
 }

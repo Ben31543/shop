@@ -13,5 +13,6 @@ namespace Shop.Repositories.Data
         }
 
         public DbSet<Shop.Models.ProductModel> Product { get; set; }
+        public DbSet<Shop.Models.CategoryModel> Category { get; set; }
     }
 }

@@ -14,10 +14,12 @@ namespace Shop.Controllers
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: Product
@@ -51,7 +53,7 @@ namespace Shop.Controllers
             else
                 products = products.Skip((page - 1) * pageSize).Take(pageSize);
 
-            return View(products);
+            return View(await _productRepository.GetAllWithCategories());
         }
 
         // GET: Product/Details/5
@@ -74,6 +76,9 @@ namespace Shop.Controllers
         // GET: Product/Create
         public IActionResult Create()
         {
+            var categories = _categoryRepository.GetAllAsync().Result;
+            var selectlistCategories = new SelectList(categories, "Id", "Name");
+            ViewData["Category"] = selectlistCategories;
             return View();
         }
 
@@ -82,7 +87,7 @@ namespace Shop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Count,SKU")] ProductModel productModel)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Count,SKU,CategoryId")] ProductModel productModel)
         {
             if (ModelState.IsValid)
             {
@@ -105,6 +110,9 @@ namespace Shop.Controllers
             {
                 return NotFound();
             }
+            var categories = _categoryRepository.GetAllAsync().Result;
+            var selectlistCategories = new SelectList(categories, "Id", "Name");
+            ViewData["Category"] = selectlistCategories;
             return View(productModel);
         }
 
@@ -113,7 +121,7 @@ namespace Shop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Count,SKU")] ProductModel productModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Count,SKU,CategoryId")] ProductModel productModel)
         {
             if (id != productModel.Id)
             {

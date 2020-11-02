@@ -13,7 +13,8 @@ namespace Shop.Repositories.Interfaces
         Task DeleteAsync(int? id);
         Task<ProductModel> UpdateAsync(ProductModel productModel);
         Task<ProductModel> CreateAsync(ProductModel productModel);
-        bool ProductExists(int? id);
         Task<List<ProductModel>> SearchedProducts(string searchString);
+        Task<IEnumerable<ProductModel>> GetAllWithCategories();
+        bool ProductExists(int? id);
     }
 }
