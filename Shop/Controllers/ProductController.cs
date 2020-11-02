@@ -23,11 +23,9 @@ namespace Shop.Controllers
         // GET: Product
         public async Task<IActionResult> Index(string searchString, int page = 1)
         {
-            //var foundProducts = _productRepository.SearchedProducts(searchString);
-            //return View(await foundProducts);
-
+            
             var products = await _productRepository.GetAllAsync();
-            int pageSize = 5, productCount = products.Count();
+            int pageSize = 3, productCount = products.Count();
 
             if (page * pageSize - 2 > productCount)
             {

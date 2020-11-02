@@ -13,8 +13,7 @@ namespace Shop.Models
         public decimal? Price { get; set; }
         [Required]
         public int Count { get; set; }
-        [Required, StringLength(8)]
+        [Required, StringLength(6)]
         public string SKU { get; set; }
-
     }
 }
