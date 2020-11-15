@@ -99,10 +99,8 @@ namespace Shop.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }

@@ -5,6 +5,7 @@ using Shop.Repositories.Data;
 using Shop.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -57,14 +58,28 @@ namespace Shop.Repositories.Implementations
             await _context.SaveChangesAsync();
             return productModel;
         }
+
+        public async Task<IList<ProductModel>> SearchProducts(string searchString)
+        {
+            //todo: handle searchString == null case
+	        return await _context.Product.Where(s => s.Name.Contains(searchString)).ToListAsync();
+        }
+
         public async Task<List<ProductModel>> SearchedProducts(string searchString)
         {
             List<ProductModel> foundProducts = new List<ProductModel>();
             string queryString = $"SELECT * FROM Product" +
-                $" WHERE Name LIKE '%{searchString}%'";
-            using (SqlConnection connection = new SqlConnection("Server=SQL5080.site4now.net;Database=DB_A15799_candy;User Id=DB_A15799_candy_admin;Password=qwerty123"))
+                $" WHERE Name LIKE '%@search%'";
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                var parameter = new SqlParameter("search", SqlDbType.NVarChar)
+					                {
+						                Value = searchString
+					                };
+
+                command.Parameters.Add(parameter);
+
                 try
                 {
                     connection.Open();
