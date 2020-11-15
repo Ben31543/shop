@@ -13,6 +13,6 @@ namespace Shop.Repositories.Interfaces
         Task DeleteAsync(int? id);
         Task<CategoryModel> UpdateAsync(CategoryModel categoryModel);
         Task<CategoryModel> CreateAsync(CategoryModel categoryModel);
-        bool CategoryExists(int? id);
+        Task<bool> CategoryExistsAsync(int? id);
     }
 }
