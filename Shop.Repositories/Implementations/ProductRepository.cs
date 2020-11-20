@@ -41,7 +41,7 @@ namespace Shop.Repositories.Implementations
 
         public async Task<ProductModel> GetAsync(int? id)
         {
-            return await _context.Product.FirstOrDefaultAsync(m => m.Id == id); 
+            return await _context.Product.FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public bool ProductExists(int? id)
