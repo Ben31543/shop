@@ -95,14 +95,12 @@ namespace Shop.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryModelExists(categoryModel.Id))
+                    if (!(await CategoryModelExists(categoryModel.Id)))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -132,9 +130,9 @@ namespace Shop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryModelExists(int id)
+        private async Task<bool> CategoryModelExists(int id)
         {
-            return _categoryRepository.CategoryExists(id);
+            return await _categoryRepository.CategoryExistsAsync(id);
         }
     }
 }

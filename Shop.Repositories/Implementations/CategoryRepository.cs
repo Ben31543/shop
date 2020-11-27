@@ -19,9 +19,9 @@ namespace Shop.Repositories.Implementations
             _context = context;
         }
 
-        public bool CategoryExists(int? id)
+        public async Task<bool> CategoryExistsAsync(int? id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return await _context.Product.AnyAsync(e => e.Id == id);
         }
 
         public async Task<CategoryModel> CreateAsync(CategoryModel categoryModel)
