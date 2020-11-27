@@ -6,15 +6,26 @@
 
 <h1>Products</h1>
 
-<p>
-    <a asp-action="Create">Add new product</a>
-</p>
-<form asp-controller="Product" asp-action="Index" method="get">
-    <p>
-        Search: <input type="text" name="SearchString">
-        <input type="submit" value="Search" />
-    </p>
+<form method="get">
+    <div class="form-inline form-group">
+
+        <label class="control-label">Product Name:  </label>
+        <input name="searchString" class="form-control" size="10" />
+
+        <label class="control-label">Category: </label>
+        <select name="categoryId" asp-items="@((SelectList)ViewData["CategoryId"])" class="form-control"><option>All</option></select>
+
+
+        <label class="control-label">Min Value:  </label>
+        <input name="minValue" class="form-control" size="10" />
+
+        <label class="control-label">Max Value:  </label>
+        <input name="maxValue" class="form-control" size="10" />
+
+        <input type="submit" value="Filter" class="btn btn-dark" />
+    </div>
 </form>
+
 <table class="table" border="1">
     <thead>
         <tr>
@@ -33,6 +44,7 @@
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var item in Model)
         {
@@ -57,29 +69,7 @@
             </tr>
         }
     </tbody>
+    <p>
+        <a asp-action="Create">Add new product</a>
+    </p>
 </table>
-@{
-    int allPageCount = int.Parse(ViewData["allPageCount"].ToString());
-    int pageNumber = int.Parse(ViewData["page"].ToString());
-    ++pageNumber;
-}
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="/Product/Index?Page=@(pageNumber-2)" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        @for (int i = 1; i <= allPageCount; i++)
-        {
-            <li class="page-item"><a class="page-link" href="/Product/Index?Page=@i">@i</a></li>
-        }
-        <li class="page-item">
-            <a class="page-link" href="/Product/Index?Page=@pageNumber" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
-</nav>

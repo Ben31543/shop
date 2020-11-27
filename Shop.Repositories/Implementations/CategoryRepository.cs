@@ -19,7 +19,7 @@ namespace Shop.Repositories.Implementations
             _context = context;
         }
 
-        public  bool CategoryExists(int? id)
+        public bool CategoryExists(int? id)
         {
             return _context.Product.Any(e => e.Id == id);
         }
@@ -38,9 +38,13 @@ namespace Shop.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<CategoryModel>> GetAllAsync()
+        public async Task<List<CategoryModel>> GetAllAsync()
         {
             return await _context.Category.ToListAsync();
+        }
+        public List<CategoryModel> GetAll()
+        {
+            return _context.Category.ToList();
         }
 
         public async Task<CategoryModel> GetAsync(int? id)

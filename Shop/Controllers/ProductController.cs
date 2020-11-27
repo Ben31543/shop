@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 using Shop.Repositories.Data;
+using Shop.Repositories.Implementations;
 using Shop.Repositories.Interfaces;
 
 namespace Shop.Controllers
@@ -15,48 +16,26 @@ namespace Shop.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ShopContext _context;
 
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ShopContext context)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _context = context;
         }
 
-        // GET: Product
-        public async Task<IActionResult> Index(string searchString, int page = 1)
+        public async Task<IActionResult> Index(string searchString, int? categoryId, int? minValue, int? maxValue)
         {
-            
-            var products = await _productRepository.GetAllAsync();
-            int pageSize = 3, productCount = products.Count();
+            ViewData["CategoryId"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+            var products = await _productRepository.GetAllWithCategoriesAsync();
 
-            if (page * pageSize - 2 > productCount)
-            {
-                if (productCount % pageSize == 0)
-                    page = productCount / pageSize;
-                else
-                    page = productCount / pageSize + 1;
-            }
+            if (searchString != null || categoryId != null || minValue != null || maxValue != null)
+                products = await _productRepository.FilterAsync(searchString, categoryId, minValue, maxValue);
 
-            if (page <= 1)
-                page = 1;
-            ViewData["page"] = page;
-
-            if (productCount % pageSize == 0)
-                ViewData["allPageCount"] = productCount / pageSize;
-            else
-                ViewData["allPageCount"] = productCount / pageSize + 1;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                products = await _productRepository.SearchedProducts(searchString);
-            }
-            else
-                products = products.Skip((page - 1) * pageSize).Take(pageSize);
-
-            return View(await _productRepository.GetAllWithCategories());
+            return View(products);
         }
 
-        // GET: Product/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -74,11 +53,9 @@ namespace Shop.Controllers
         }
 
         // GET: Product/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var categories = _categoryRepository.GetAllAsync().Result;
-            var selectlistCategories = new SelectList(categories, "Id", "Name");
-            ViewData["Category"] = selectlistCategories;
+            ViewData["CategoryId"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             return View();
         }
 
@@ -136,7 +113,7 @@ namespace Shop.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductModelExists(productModel.Id))
+                    if (_productRepository.GetAsync(id) == null)
                     {
                         return NotFound();
                     }
@@ -174,11 +151,6 @@ namespace Shop.Controllers
         {
             await _productRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductModelExists(int id)
-        {
-            return _productRepository.ProductExists(id);
         }
     }
 }

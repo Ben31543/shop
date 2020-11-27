@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Repositories.Implementations
 {
-    class ProductRepository : IProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly ShopContext _context;
 
@@ -34,19 +34,19 @@ namespace Shop.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ProductModel>> GetAllAsync()
+        public async Task<List<ProductModel>> GetAllAsync()
         {
             return await _context.Product.ToListAsync();
         }
 
         public async Task<ProductModel> GetAsync(int? id)
         {
-            return await _context.Product.FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Product.Include(x => x.Category).FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public bool ProductExists(int? id)
+        public async Task<bool> ProductExistsAsync(int? id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return await _context.Product.AnyAsync(e => e.Id == id);
         }
 
         public async Task<ProductModel> UpdateAsync(ProductModel productModel)
@@ -55,41 +55,26 @@ namespace Shop.Repositories.Implementations
             await _context.SaveChangesAsync();
             return productModel;
         }
-        public async Task<List<ProductModel>> SearchedProducts(string searchString)
-        {
-            List<ProductModel> foundProducts = new List<ProductModel>();
-            string queryString = $"SELECT * FROM Product" +
-                $" WHERE Name LIKE '%{searchString}%'";
-            using (SqlConnection connection = new SqlConnection("Server=SQL5080.site4now.net;Database=DB_A15799_candy;User Id=DB_A15799_candy_admin;Password=qwerty123"))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                try
-                {
-                    connection.Open();
-                    SqlDataReader reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        ProductModel product = new ProductModel();
-                        product.Id = (int)reader.GetValue(0);
-                        product.Name = (string)reader.GetValue(1);
-                        product.Price = (decimal)reader.GetValue(2);
-                        product.Count = (int)reader.GetValue(4);
-                        product.SKU = (string)reader.GetValue(3);
-                        foundProducts.Add(product);
-                    }
-                    reader.Close();
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-            }
-            return foundProducts;
-        }
 
-        public async Task<IEnumerable<ProductModel>> GetAllWithCategories()
+        public async Task<List<ProductModel>> GetAllWithCategoriesAsync()
         {
             return await _context.Product.Include(x => x.Category).ToListAsync();
+        }
+
+        public async Task<List<ProductModel>> FilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
+        {
+            var products = await GetAllWithCategoriesAsync();
+
+            if (minValue <= 0 || maxValue <= 0)
+                return products;
+
+            var byPrice = _context.Product.Where(product => product.Price >= minValue && product.Price <= maxValue).ToList();
+            var byName = _context.Product.Where(product => product.Name.Contains(searchString)).ToList();
+            var byCategory = _context.Product.Where(product => product.CategoryId == categoryId).ToList();
+
+            products = byCategory.Concat(byName).Concat(byPrice).ToList();
+
+            return products;
         }
     }
 }
