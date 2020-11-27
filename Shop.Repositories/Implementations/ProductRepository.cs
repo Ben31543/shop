@@ -77,5 +77,22 @@ namespace Shop.Repositories.Implementations
 
             return products;
         }
+
+        public async Task<IList<ProductModel>> SerachproductsAsync(string searchText)
+        {
+            var products = _context.Product.AsNoTracking().AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                products = products.Where(s => s.Name.Contains(searchText));
+            }
+
+            return await products
+                .Select(s=>new ProductModel
+                {
+                    Id = s.Id,
+                    //...
+                })
+                .ToListAsync();
+        }
     }
 }

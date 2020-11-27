@@ -15,5 +15,7 @@ namespace Shop.Repositories.Interfaces
         Task<ProductModel> CreateAsync(ProductModel productModel);
         Task<List<ProductModel>> GetAllWithCategoriesAsync();
         Task<List<ProductModel>> FilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue);
+
+        Task<IList<ProductModel>> SerachproductsAsync(string searchText);
     }
 }
