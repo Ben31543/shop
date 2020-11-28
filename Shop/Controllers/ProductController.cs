@@ -31,7 +31,7 @@ namespace Shop.Controllers
             var products = await _productRepository.GetAllWithCategoriesAsync();
 
             if (searchString != null || categoryId != null || minValue != null || maxValue != null)
-                products = await _productRepository.FilterAsync(searchString, categoryId, minValue, maxValue);
+                products = await _productRepository.GeneralFilterAsync(searchString, categoryId, minValue, maxValue);
 
             return View(products);
         }
@@ -87,9 +87,7 @@ namespace Shop.Controllers
             {
                 return NotFound();
             }
-            var categories = _categoryRepository.GetAllAsync().Result;
-            var selectlistCategories = new SelectList(categories, "Id", "Name");
-            ViewData["Category"] = selectlistCategories;
+            ViewData["CategoryId"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             return View(productModel);
         }
 

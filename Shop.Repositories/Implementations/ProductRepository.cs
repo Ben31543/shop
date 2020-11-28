@@ -62,7 +62,7 @@ namespace Shop.Repositories.Implementations
             return await _context.Product.Include(x => x.Category).ToListAsync();
         }
 
-        public async Task<List<ProductModel>> FilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
+        public async Task<List<ProductModel>> GeneralFilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
         {
             var products = await GetAllWithCategoriesAsync();
 
@@ -78,7 +78,7 @@ namespace Shop.Repositories.Implementations
             return products;
         }
 
-        public async Task<IList<ProductModel>> SerachproductsAsync(string searchText)
+        public async Task<IList<ProductModel>> SerachProductsAsync(string searchText)
         {
             var products = _context.Product.AsNoTracking().AsQueryable();
             if (!string.IsNullOrWhiteSpace(searchText))
@@ -86,13 +86,31 @@ namespace Shop.Repositories.Implementations
                 products = products.Where(s => s.Name.Contains(searchText));
             }
 
-            return await products
-                .Select(s=>new ProductModel
-                {
-                    Id = s.Id,
-                    //...
-                })
-                .ToListAsync();
+            return await products.ToListAsync();
+        }
+
+        public async Task<List<ProductModel>> FilterByNameAsync(string searchString)
+        {
+            var products = await GetAllWithCategoriesAsync();
+            if (!String.IsNullOrWhiteSpace(searchString))
+                products = await _context.Product.Where(product => product.Name.Contains(searchString)).ToListAsync();
+            return products;
+        }
+
+        public async Task<List<ProductModel>> FilterByCategoryAsync(int? categoryId)
+        {
+            var products = await GetAllWithCategoriesAsync();
+            if (categoryId != null)
+                products = await _context.Product.Where(product => product.CategoryId == categoryId).ToListAsync();
+            return products;
+        }
+
+        public async Task<List<ProductModel>> FilterByPriceAsync(int? minValue, int? maxValue)
+        {
+            var products = await GetAllWithCategoriesAsync();
+            if ((minValue >= 0 || maxValue >= 0) && (minValue != null || maxValue != null))
+                products = await _context.Product.Where(product => product.Price >= minValue && product.Price <= maxValue).ToListAsync();
+            return products;
         }
     }
 }
