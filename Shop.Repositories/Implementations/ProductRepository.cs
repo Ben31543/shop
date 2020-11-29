@@ -86,13 +86,7 @@ namespace Shop.Repositories.Implementations
                 products = products.Where(s => s.Name.Contains(searchText));
             }
 
-            return await products
-                .Select(s=>new ProductModel
-                {
-                    Id = s.Id,
-                    //...
-                })
-                .ToListAsync();
+            return await products.ToListAsync();
         }
     }
 }
