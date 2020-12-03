@@ -47,28 +47,34 @@ namespace Shop.Repositories.Implementations
         public async Task<List<CategoryModel>> GetAllAsync()
         {
             return await _context
-	            .Categories
-	            .Select(s=>new CategoryModel
-	            {
+                .Categories
+                .Select(s => new CategoryModel
+                {
                     Name = s.Name,
                     Id = s.Id
-	            })
-	            .ToListAsync();
-        }
-
-        public List<CategoryModel> GetAll()
-        {
-            return _context.Categories.ToList();
+                })
+                .ToListAsync();
         }
 
         public async Task<CategoryModel> GetAsync(int? id)
         {
-            return await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
+            var categoryModel = await _context.Categories.FindAsync(id);
+            var category = new CategoryModel
+            {
+                Id = categoryModel.Id,
+                Name = categoryModel.Name
+            };
+            return category;
         }
 
         public async Task<CategoryModel> UpdateAsync(CategoryModel categoryModel)
         {
-            _context.Update(categoryModel);
+            var category = new Category
+            {
+                Name = categoryModel.Name,
+                Id=categoryModel.Id
+            };
+            _context.Update(category);
             await _context.SaveChangesAsync();
             return categoryModel;
         }

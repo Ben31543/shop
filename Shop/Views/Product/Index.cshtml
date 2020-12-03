@@ -10,7 +10,7 @@
     <div class="form-inline form-group">
 
         <label class="control-label">Product Name:  </label>
-        <input name="searchString" class="form-control" size="10" />
+        <input name="searchString" class="form-control" size="10"  formmethod="post"/>
 
         <label class="control-label">Category: </label>
         <select name="categoryId" asp-items="@((SelectList)ViewData["CategoryId"])" class="form-control"><option>All</option></select>
@@ -22,7 +22,7 @@
         <label class="control-label">Max Value:  </label>
         <input name="maxValue" class="form-control" size="10" />
 
-        <input type="submit" value="Filter" class="btn btn-dark" />
+        <input type="submit" value="Filter" class="btn btn-dark"  />
     </div>
 </form>
 
@@ -30,19 +30,13 @@
     <thead>
         <tr>
             <th>
-                ID
-            </th>
-            <th>
                 Name
             </th>
-            <th>
+            @*<th>
                 Category
-            </th>
+            </th>*@
             <th>
                 Price
-            </th>
-            <th>
-                Count
             </th>
             <th></th>
         </tr>
@@ -53,23 +47,17 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Count)
-                </td>
-                <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" title="Id: @item.Id &#10;Product Name: @item.Name &#10;Category: @item.Category.Name">Details</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Id: @item.Id &#10;Product Name: @item.Name &#10;@*Category: @item.Category.Name*@">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>

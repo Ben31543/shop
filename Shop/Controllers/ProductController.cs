@@ -25,10 +25,11 @@ namespace Shop.Controllers
             _context = context;
         }
 
+
         public async Task<IActionResult> Index(string searchString, int? categoryId, int? minValue, int? maxValue)
         {
             ViewData["CategoryId"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
-            var products = await _productRepository.GetAllWithCategoriesAsync();
+            var products = await _productRepository.GetAllAsync();
 
             if (searchString != null || categoryId != null || minValue != null || maxValue != null)
                 products = await _productRepository.GeneralFilterAsync(searchString, categoryId, minValue, maxValue);
@@ -149,12 +150,6 @@ namespace Shop.Controllers
         {
             await _productRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Test()
-        {
-	        return Json(await _productRepository.SerachproductsAsync("Snick"));
         }
     }
 }

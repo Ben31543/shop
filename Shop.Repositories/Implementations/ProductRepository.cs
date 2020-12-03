@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 using Shop.Repositories.Data;
+using Shop.Repositories.Entities;
 using Shop.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,74 +24,132 @@ namespace Shop.Repositories.Implementations
         }
         public async Task<ProductModel> CreateAsync(ProductModel productModel)
         {
-            _context.Add(productModel);
+            var product = new Product
+            {
+                Id = productModel.Id,
+                Name = productModel.Name,
+                Price = productModel.Price,
+                Count = productModel.Count,
+                SKU = productModel.SKU,
+                CategoryId = productModel.CategoryId
+            };
+
+            _context.Add(product);
             await _context.SaveChangesAsync();
             return productModel;
         }
 
         public async Task DeleteAsync(int? id)
         {
-            var productModel = await _context.Product.FindAsync(id);
-            _context.Product.Remove(productModel);
+            var productModel = await _context.Products.FindAsync(id);
+            _context.Products.Remove(productModel);
             await _context.SaveChangesAsync();
         }
 
         public async Task<List<ProductModel>> GetAllAsync()
         {
-            return await _context.Product.ToListAsync();
+            return await _context
+                .Products
+                .Select(product => new ProductModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Count = product.Count,
+                    SKU = product.SKU,
+                    CategoryId = product.CategoryId,
+                    //Category = product.Category
+                })
+                .ToListAsync();
         }
 
         public async Task<ProductModel> GetAsync(int? id)
         {
-            return await _context.Product.Include(x => x.Category).FirstOrDefaultAsync(m => m.Id == id);
+            var productModel = await _context.Products.FindAsync(id);
+            var product = new ProductModel
+            {
+                Id = productModel.Id,
+                Name = productModel.Name,
+                Price = productModel.Price,
+                Count = productModel.Count,
+                SKU = productModel.SKU,
+                CategoryId = productModel.CategoryId
+            };
+            return product;
         }
 
         public async Task<bool> ProductExistsAsync(int? id)
         {
-            return await _context.Product.AnyAsync(e => e.Id == id);
+            return await _context.Products.AnyAsync(e => e.Id == id);
         }
 
         public async Task<ProductModel> UpdateAsync(ProductModel productModel)
         {
-            _context.Update(productModel);
+            var product = new Product
+            {
+                Id = productModel.Id,
+                Name = productModel.Name,
+                Price = productModel.Price,
+                Count = productModel.Count,
+                SKU = productModel.SKU,
+                CategoryId = productModel.CategoryId
+            };
+            _context.Update(product);
             await _context.SaveChangesAsync();
             return productModel;
         }
 
-        public async Task<List<ProductModel>> GetAllWithCategoriesAsync()
-        {
-            return await _context.Product.Include(x => x.Category).ToListAsync();
-        }
+        //public async Task<List<ProductModel>> GetAllWithCategoriesAsync()
+        //{
+        //    var products = _context.Products.AsQueryable().AsEnumerable();
+        //    return await products.GroupBy(pr => pr.Category).ToList().;
+        //}
 
         public async Task<List<ProductModel>> GeneralFilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
         {
-            var products = await GetAllWithCategoriesAsync();
+            var products = _context.Products.AsQueryable().AsEnumerable();
 
             if (minValue <= 0 || maxValue <= 0)
-                return products;
+                return null;
 
-            var byPrice = _context.Product.Where(product => product.Price >= minValue && product.Price <= maxValue).ToList();
-            var byName = _context.Product.Where(product => product.Name.Contains(searchString)).ToList();
-            var byCategory = _context.Product.Where(product => product.CategoryId == categoryId).ToList();
+             products = await _context.Products
+                .Where
+                (product => 
+                product.CategoryId == categoryId 
+                || product.Name.Contains(searchString)
+                || product.Price >= minValue && product.Price <= maxValue)
+                .ToListAsync();
 
-            products = byCategory.Concat(byName).Concat(byPrice).ToList();
-
-            return products;
+            return  products
+                .Select(productModel => new ProductModel
+                {
+                    Id = productModel.Id,
+                    Name = productModel.Name,
+                    Price = productModel.Price,
+                    Count = productModel.Count,
+                    SKU = productModel.SKU,
+                    CategoryId = productModel.CategoryId
+                })
+                .ToList();
         }
 
         public async Task<IList<ProductModel>> SerachProductsAsync(string searchText)
         {
-            var products = _context.Product.AsNoTracking().AsQueryable();
+            var products = _context.Products.AsNoTracking().AsQueryable();
             if (!string.IsNullOrWhiteSpace(searchText))
             {
                 products = products.Where(s => s.Name.Contains(searchText));
             }
 
             return await products
-                .Select(s=>new ProductModel
+                .Select(productModel => new ProductModel
                 {
-                    Id = s.Id,
-                    //...
+                    Id = productModel.Id,
+                    Name = productModel.Name,
+                    Price = productModel.Price,
+                    Count = productModel.Count,
+                    SKU = productModel.SKU,
+                    CategoryId = productModel.CategoryId
                 })
                 .ToListAsync();
         }
