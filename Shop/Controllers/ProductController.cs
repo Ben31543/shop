@@ -150,5 +150,11 @@ namespace Shop.Controllers
             await _productRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Test()
+        {
+	        return Json(await _productRepository.SerachproductsAsync("Snick"));
+        }
     }
 }

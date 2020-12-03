@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Shop.Repositories.Entities;
 
 namespace Shop.Repositories.Data
 {
@@ -12,7 +13,7 @@ namespace Shop.Repositories.Data
         {
         }
 
-        public DbSet<Shop.Models.ProductModel> Product { get; set; }
-        public DbSet<Shop.Models.CategoryModel> Category { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
