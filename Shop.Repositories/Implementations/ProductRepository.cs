@@ -48,19 +48,20 @@ namespace Shop.Repositories.Implementations
 
         public async Task<List<ProductModel>> GetAllAsync()
         {
-            return await _context
-                .Products
-                .Select(product => new ProductModel
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Price = product.Price,
-                    Count = product.Count,
-                    SKU = product.SKU,
-                    CategoryId = product.CategoryId,
-                    //Category = product.Category
-                })
-                .ToListAsync();
+	        return await _context
+		        .Products
+		        .Include(s => s.Category)
+		        .Select(product => new ProductModel
+		        {
+			        Id = product.Id,
+			        Name = product.Name,
+			        Price = product.Price,
+			        Count = product.Count,
+			        SKU = product.SKU,
+			        CategoryId = product.CategoryId,
+			        CategoryName = product.Category.Name
+		        })
+		        .ToListAsync();
         }
 
         public async Task<ProductModel> GetAsync(int? id)
@@ -107,30 +108,30 @@ namespace Shop.Repositories.Implementations
 
         public async Task<List<ProductModel>> GeneralFilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
         {
-            var products = _context.Products.AsQueryable().AsEnumerable();
+            var products = _context.Products.AsQueryable().AsNoTracking();
 
             if (minValue <= 0 || maxValue <= 0)
                 return null;
 
-             products = await _context.Products
-                .Where
-                (product => 
-                product.CategoryId == categoryId 
-                || product.Name.Contains(searchString)
-                || product.Price >= minValue && product.Price <= maxValue)
-                .ToListAsync();
+            if (categoryId.HasValue)
+            {
+	            products = products.Where(prod => prod.CategoryId == categoryId);
+            }
 
-            return  products
+             var list = await products
+                .Where(product => product.Name.Contains(searchString) || product.Price >= minValue && product.Price <= maxValue)
                 .Select(productModel => new ProductModel
                 {
-                    Id = productModel.Id,
-                    Name = productModel.Name,
-                    Price = productModel.Price,
-                    Count = productModel.Count,
-                    SKU = productModel.SKU,
-                    CategoryId = productModel.CategoryId
+	                Id = productModel.Id,
+	                Name = productModel.Name,
+	                Price = productModel.Price,
+	                Count = productModel.Count,
+	                SKU = productModel.SKU,
+	                CategoryId = productModel.CategoryId
                 })
-                .ToList();
+                .ToListAsync();
+
+             return list;
         }
 
         public async Task<IList<ProductModel>> SerachProductsAsync(string searchText)

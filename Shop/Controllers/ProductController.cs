@@ -26,15 +26,26 @@ namespace Shop.Controllers
         }
 
 
-        public async Task<IActionResult> Index(string searchString, int? categoryId, int? minValue, int? maxValue)
+        public async Task<IActionResult> Index()
         {
-            ViewData["CategoryId"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             var products = await _productRepository.GetAllAsync();
 
-            if (searchString != null || categoryId != null || minValue != null || maxValue != null)
-                products = await _productRepository.GeneralFilterAsync(searchString, categoryId, minValue, maxValue);
+            var model = new ProductPageModel()
+            {
+                SearchCriteria = new ProductCriteria(),
+                Products = products
+            };
+            return View(model);
+        }
 
-            return View(products);
+        [HttpPost]
+        public async Task<IActionResult> Search(ProductPageModel model)
+        {
+	        ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+	        var products = await _productRepository.GeneralFilterAsync(model.SearchCriteria.SearchString, model.SearchCriteria.CategoryId, null, null);
+	        model.Products = products;
+	        return View("Index", model);
         }
 
         public async Task<IActionResult> Details(int? id)

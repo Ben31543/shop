@@ -16,6 +16,6 @@ namespace Shop.Models
         [Required, StringLength(6)]
         public string SKU { get; set; }
         public int CategoryId { get; set; }
-        public CategoryModel Category { get; set; }
+        public string CategoryName { get; set; }
     }
 }
