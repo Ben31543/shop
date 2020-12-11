@@ -17,5 +17,7 @@ namespace Shop.Models
         public string SKU { get; set; }
         public int CategoryId { get; set; }
         public CategoryModel Category { get; set; }
+        [NotMapped]
+        public string CategoryName { get; set; }
     }
 }

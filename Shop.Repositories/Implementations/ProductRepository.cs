@@ -48,8 +48,9 @@ namespace Shop.Repositories.Implementations
 
         public async Task<List<ProductModel>> GetAllAsync()
         {
-            return await _context
-                .Products
+            var products = _context.Products.AsQueryable();
+            return await products
+                .Include(product => product.Category)
                 .Select(product => new ProductModel
                 {
                     Id = product.Id,
@@ -58,7 +59,7 @@ namespace Shop.Repositories.Implementations
                     Count = product.Count,
                     SKU = product.SKU,
                     CategoryId = product.CategoryId,
-                    //Category = product.Category
+                    CategoryName = product.Category.Name
                 })
                 .ToListAsync();
         }
@@ -73,7 +74,8 @@ namespace Shop.Repositories.Implementations
                 Price = productModel.Price,
                 Count = productModel.Count,
                 SKU = productModel.SKU,
-                CategoryId = productModel.CategoryId
+                CategoryId = productModel.CategoryId,
+                //CategoryName = productModel.Category.Name
             };
             return product;
         }
@@ -112,15 +114,15 @@ namespace Shop.Repositories.Implementations
             if (minValue <= 0 || maxValue <= 0)
                 return null;
 
-             products = await _context.Products
-                .Where
-                (product => 
-                product.CategoryId == categoryId 
-                || product.Name.Contains(searchString)
-                || product.Price >= minValue && product.Price <= maxValue)
-                .ToListAsync();
+            products = await _context.Products
+               .Where
+               (product =>
+               product.CategoryId == categoryId
+               || product.Name.Contains(searchString)
+               || product.Price >= minValue && product.Price <= maxValue)
+               .ToListAsync();
 
-            return  products
+            return products
                 .Select(productModel => new ProductModel
                 {
                     Id = productModel.Id,
