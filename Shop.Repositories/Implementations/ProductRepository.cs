@@ -48,9 +48,8 @@ namespace Shop.Repositories.Implementations
 
         public async Task<List<ProductModel>> GetAllAsync()
         {
-            var products = _context.Products.AsQueryable();
-            return await products
-                .Include(product => product.Category)
+            return await _context
+                .Products
                 .Select(product => new ProductModel
                 {
                     Id = product.Id,
@@ -59,7 +58,7 @@ namespace Shop.Repositories.Implementations
                     Count = product.Count,
                     SKU = product.SKU,
                     CategoryId = product.CategoryId,
-                    CategoryName = product.Category.Name
+                    //Category = product.Category
                 })
                 .ToListAsync();
         }
@@ -109,7 +108,7 @@ namespace Shop.Repositories.Implementations
 
         public async Task<List<ProductModel>> GeneralFilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
         {
-            var products = _context.Products.AsQueryable().AsEnumerable();
+            var products = _context.Products.AsQueryable();
 
             if (minValue <= 0 || maxValue <= 0)
                 return null;
@@ -122,7 +121,7 @@ namespace Shop.Repositories.Implementations
                || product.Price >= minValue && product.Price <= maxValue)
                .ToListAsync();
 
-            return products
+            return await products
                 .Select(productModel => new ProductModel
                 {
                     Id = productModel.Id,
@@ -132,7 +131,9 @@ namespace Shop.Repositories.Implementations
                     SKU = productModel.SKU,
                     CategoryId = productModel.CategoryId
                 })
-                .ToList();
+                .ToListAsync();
+
+            return list;
         }
 
         public async Task<IList<ProductModel>> SerachProductsAsync(string searchText)
