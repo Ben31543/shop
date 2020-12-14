@@ -31,11 +31,12 @@ namespace Shop.Controllers
             ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             var products = await _productRepository.GetAllAsync();
 
-            var model = new ProductPageModel()
+            var model = new ProductPageModel(_productRepository)
             {
                 SearchCriteria = new ProductCriteria(),
                 Products = products
             };
+
             return View(model);
         }
 

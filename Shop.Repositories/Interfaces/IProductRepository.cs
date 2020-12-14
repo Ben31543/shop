@@ -13,11 +13,6 @@ namespace Shop.Repositories.Interfaces
         Task DeleteAsync(int? id);
         Task<ProductModel> UpdateAsync(ProductModel productModel);
         Task<ProductModel> CreateAsync(ProductModel productModel);
-        //Task<List<ProductModel>> GetAllWithCategoriesAsync();
         Task<List<ProductModel>> GeneralFilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue);
-        //Task<List<ProductModel>> FilterByNameAsync(string searchText);
-        //Task<List<ProductModel>> FilterByCategoryAsync(int? categoryId);
-        //Task<List<ProductModel>> FilterByPriceAsync(int? minValue, int? maxValue);
-
     }
 }

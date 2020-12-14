@@ -100,12 +100,6 @@ namespace Shop.Repositories.Implementations
             return productModel;
         }
 
-        //public async Task<List<ProductModel>> GetAllWithCategoriesAsync()
-        //{
-        //    var products = _context.Products.AsQueryable().AsEnumerable();
-        //    return await products.GroupBy(pr => pr.Category).ToList().;
-        //}
-
         public async Task<List<ProductModel>> GeneralFilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
         {
             var products = _context.Products.AsQueryable();
