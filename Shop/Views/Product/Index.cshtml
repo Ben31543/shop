@@ -1,30 +1,27 @@
 ﻿@model ProductPageModel
 
-@{
-	ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
 <h1>Products</h1>
 
 @using (Html.BeginForm("Search", "Product", null, FormMethod.Post))
 {
-	<div class="form-inline form-group">
+<div class="form-inline form-group">
 
-		<label class="control-label">Product Name:  </label>
-		@Html.TextBoxFor(s=>s.SearchCriteria.SearchString, null, new{@class="form-control", size="10"})
+    <label class="control-label">Product Name:  </label>
+    @Html.TextBoxFor(s => s.SearchCriteria.SearchString, null, new { @class = "form-control", size = "10" })
 
-		<label class="control-label">Category: </label>
-		@Html.DropDownListFor(s=>s.SearchCriteria.CategoryId, (SelectList)ViewData["Categories"], "All", new { @class = "form-control" })
+    <label class="control-label">Category: </label>
+    @Html.DropDownListFor(s => s.SearchCriteria.CategoryId, (SelectList)ViewData["Categories"], "All", new { @class = "form-control" })
 
-		<label class="control-label">Min Value:  </label>
-		<input name="minValue" class="form-control" size="10" />
+    <label class="control-label">Min Price: </label>
+    @Html.TextBoxFor(s => s.SearchCriteria.MinValue, null, new { @class = "form-control", size = "10" })
 
-		<label class="control-label">Max Value:  </label>
-		<input name="maxValue" class="form-control" size="10" />
+    <label class="control-label">Max Price: </label>
+    @Html.TextBoxFor(s => s.SearchCriteria.MaxValue, null, new { @class = "form-control", size = "10" })
 
-		<input type="submit" value="Filter" class="btn btn-dark" />
-	</div>
-}
+    <input type="submit" value="Filter" class="btn btn-dark" />
+</div>}
 
 
 
@@ -37,9 +34,9 @@
             <th>
                 Name
             </th>
-            @*<th>
+            <th>
                 Category
-            </th>*@
+            </th>
             <th>
                 Price
             </th>
@@ -48,27 +45,27 @@
     </thead>
 
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Products)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" title="Id: @item.Id &#10;Product Name: @item.Name &#10;@*Category: @item.Category.Name*@">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CategoryName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Price)
+    </td>
+    <td>
+        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+        <a asp-action="Details" asp-route-id="@item.Id" title="Id: @item.Id &#10;Product Name: @item.Name &#10;Category: @item.CategoryName">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+    </td>
+</tr>
+}
     </tbody>
     <p>
-        <a asp-action="Create">Add new product</a>
+        <a asp-action="Create" class="btn btn-dark">Add new product</a>
     </p>
 </table>

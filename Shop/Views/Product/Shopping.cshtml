@@ -1,0 +1,16 @@
+﻿@model List<ProductModel>
+
+<h1>
+    Select Products To Buy
+</h1>
+<div>
+    @foreach (var item in Model)
+    {
+    <div>
+        <img src="~/img/product.jpg" alt="product" width="60" height="60">
+        <span>@item.Name</span>,
+        <span>@item.Price դրամ</span>
+        <input type="checkbox"/>
+    </div>
+    }
+</div>

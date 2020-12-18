@@ -43,15 +43,17 @@ namespace Shop.Repositories.Implementations
             _context.Categories.Remove(categoryModel);
             await _context.SaveChangesAsync();
         }
-
+         
         public async Task<List<CategoryModel>> GetAllAsync()
         {
             return await _context
                 .Categories
+                .Include(x=>x.Products)
                 .Select(s => new CategoryModel
                 {
                     Name = s.Name,
-                    Id = s.Id
+                    Id = s.Id,
+                    ProductsCount=s.Products.Count
                 })
                 .ToListAsync();
         }

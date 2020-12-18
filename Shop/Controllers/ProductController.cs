@@ -43,10 +43,23 @@ namespace Shop.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(ProductPageModel model)
         {
-	        ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
-	        var products = await _productRepository.GeneralFilterAsync(model.SearchCriteria.SearchString, model.SearchCriteria.CategoryId, null, null);
-	        model.Products = products;
-	        return View("Index", model);
+            var criterias = new ProductCriteria
+            {
+                CategoryId = model.SearchCriteria.CategoryId,
+                SearchString = model.SearchCriteria.SearchString,
+                MinValue = model.SearchCriteria.MinValue,
+                MaxValue = model.SearchCriteria.MaxValue
+            };
+
+            var products = await _productRepository.GeneralFilterAsync(criterias);
+
+            model.Products = products;
+            return View("Index", model);
+        }
+
+        public async Task<IActionResult> Shopping()
+        {
+            return View(await _productRepository.GetAllAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -57,6 +70,7 @@ namespace Shop.Controllers
             }
 
             var productModel = await _productRepository.GetAsync(id);
+
             if (productModel == null)
             {
                 return NotFound();
@@ -65,16 +79,12 @@ namespace Shop.Controllers
             return View(productModel);
         }
 
-        // GET: Product/Create
         public async Task<IActionResult> Create()
         {
             ViewData["CategoryId"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             return View();
         }
 
-        // POST: Product/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,Count,SKU,CategoryId")] ProductModel productModel)
@@ -87,7 +97,6 @@ namespace Shop.Controllers
             return View(productModel);
         }
 
-        // GET: Product/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,9 +113,6 @@ namespace Shop.Controllers
             return View(productModel);
         }
 
-        // POST: Product/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Count,SKU,CategoryId")] ProductModel productModel)
@@ -138,7 +144,6 @@ namespace Shop.Controllers
             return View(productModel);
         }
 
-        // GET: Product/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,15 +152,14 @@ namespace Shop.Controllers
             }
 
             var productModel = await _productRepository.GetAsync(id);
+
             if (productModel == null)
             {
                 return NotFound();
             }
-
             return View(productModel);
         }
 
-        // POST: Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -50,6 +50,7 @@ namespace Shop.Repositories.Implementations
         {
             return await _context
                 .Products
+                .Include(x => x.Category)
                 .Select(product => new ProductModel
                 {
                     Id = product.Id,
@@ -58,14 +59,16 @@ namespace Shop.Repositories.Implementations
                     Count = product.Count,
                     SKU = product.SKU,
                     CategoryId = product.CategoryId,
-                    //Category = product.Category
+                    CategoryName = product.Category.Name
                 })
                 .ToListAsync();
         }
 
         public async Task<ProductModel> GetAsync(int? id)
         {
-            var productModel = await _context.Products.FindAsync(id);
+            var productModel = await _context.Products
+                .Include(x => x.Category)
+                .FirstOrDefaultAsync(x => x.Id == id);
             var product = new ProductModel
             {
                 Id = productModel.Id,
@@ -74,7 +77,7 @@ namespace Shop.Repositories.Implementations
                 Count = productModel.Count,
                 SKU = productModel.SKU,
                 CategoryId = productModel.CategoryId,
-                //CategoryName = productModel.Category.Name
+                CategoryName = productModel.Category.Name
             };
             return product;
         }
@@ -100,42 +103,23 @@ namespace Shop.Repositories.Implementations
             return productModel;
         }
 
-        public async Task<List<ProductModel>> GeneralFilterAsync(string searchString, int? categoryId, int? minValue, int? maxValue)
+        public async Task<List<ProductModel>> GeneralFilterAsync(ProductCriteria criteria)
         {
-            var products = _context.Products.AsQueryable();
+            var products = _context.Products.AsQueryable().AsNoTracking();
 
-            if (minValue <= 0 || maxValue <= 0)
-                return null;
-
-            products = await _context.Products
-               .Where
-               (product =>
-               product.CategoryId == categoryId
-               || product.Name.Contains(searchString)
-               || product.Price >= minValue && product.Price <= maxValue)
-               .ToListAsync();
-
-            return await products
-                .Select(productModel => new ProductModel
-                {
-                    Id = productModel.Id,
-                    Name = productModel.Name,
-                    Price = productModel.Price,
-                    Count = productModel.Count,
-                    SKU = productModel.SKU,
-                    CategoryId = productModel.CategoryId
-                })
-                .ToListAsync();
-
-            return list;
-        }
-
-        public async Task<IList<ProductModel>> SerachProductsAsync(string searchText)
-        {
-            var products = _context.Products.AsNoTracking().AsQueryable();
-            if (!string.IsNullOrWhiteSpace(searchText))
+            if (!String.IsNullOrWhiteSpace(criteria.SearchString))
             {
-                products = products.Where(s => s.Name.Contains(searchText));
+                products = products.Where(prod => prod.Name.Contains(criteria.SearchString));
+            }
+
+            if (criteria.CategoryId.HasValue)
+            {
+                products = products.Where(prod => prod.CategoryId == criteria.CategoryId);
+            }
+
+            if (criteria.MinValue >= 0 && criteria.MaxValue > 0)
+            {
+                products = products.Where(prod => prod.Price >= criteria.MinValue && prod.Price <= criteria.MaxValue);
             }
 
             return await products
@@ -146,7 +130,8 @@ namespace Shop.Repositories.Implementations
                     Price = productModel.Price,
                     Count = productModel.Count,
                     SKU = productModel.SKU,
-                    CategoryId = productModel.CategoryId
+                    CategoryId = productModel.CategoryId,
+                    CategoryName = productModel.Category.Name
                 })
                 .ToListAsync();
         }
