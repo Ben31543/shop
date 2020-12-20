@@ -43,6 +43,8 @@ namespace Shop.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(ProductPageModel model)
         {
+            ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+
             var criterias = new ProductCriteria
             {
                 CategoryId = model.SearchCriteria.CategoryId,
@@ -52,8 +54,8 @@ namespace Shop.Controllers
             };
 
             var products = await _productRepository.GeneralFilterAsync(criterias);
-
             model.Products = products;
+
             return View("Index", model);
         }
 
@@ -94,6 +96,7 @@ namespace Shop.Controllers
                 await _productRepository.CreateAsync(productModel);
                 return RedirectToAction(nameof(Index));
             }
+
             return View(productModel);
         }
 
@@ -105,10 +108,12 @@ namespace Shop.Controllers
             }
 
             var productModel = await _productRepository.GetAsync(id);
+
             if (productModel == null)
             {
                 return NotFound();
             }
+
             ViewData["CategoryId"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             return View(productModel);
         }

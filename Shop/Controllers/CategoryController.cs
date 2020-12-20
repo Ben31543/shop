@@ -20,13 +20,11 @@ namespace Shop.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        // GET: Category
         public async Task<IActionResult> Index()
         {
             return View(await _categoryRepository.GetAllAsync());
         }
 
-        // GET: Category/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) 
@@ -40,15 +38,11 @@ namespace Shop.Controllers
             return View(categoryModel);
         }
 
-        // GET: Category/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Category/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] CategoryModel categoryModel)
@@ -61,7 +55,6 @@ namespace Shop.Controllers
             return View(categoryModel);
         }
 
-        // GET: Category/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,9 +68,6 @@ namespace Shop.Controllers
             return View(categoryModel);
         }
 
-        // POST: Category/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] CategoryModel categoryModel)
@@ -107,7 +97,6 @@ namespace Shop.Controllers
             return View(categoryModel);
         }
 
-        // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -121,7 +110,6 @@ namespace Shop.Controllers
             return View(categoryModel);
         }
 
-        // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
