@@ -31,7 +31,7 @@ namespace Shop.Controllers
             ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             var products = await _productRepository.GetAllAsync();
 
-            var model = new ProductPageModel(_productRepository)
+            var model = new ProductPageModel
             {
                 SearchCriteria = new ProductCriteria(),
                 Products = products
@@ -45,17 +45,8 @@ namespace Shop.Controllers
         {
             ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
 
-            var criterias = new ProductCriteria
-            {
-                CategoryId = model.SearchCriteria.CategoryId,
-                SearchString = model.SearchCriteria.SearchString,
-                MinValue = model.SearchCriteria.MinValue,
-                MaxValue = model.SearchCriteria.MaxValue
-            };
-
-            var products = await _productRepository.GeneralFilterAsync(criterias);
-            model.Products = products;
-
+            model.Products = await _productRepository.GeneralFilterAsync(model.SearchCriteria);
+            
             return View("Index", model);
         }
 

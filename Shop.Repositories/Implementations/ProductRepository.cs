@@ -66,25 +66,19 @@ namespace Shop.Repositories.Implementations
 
         public async Task<ProductModel> GetAsync(int? id)
         {
-            var productModel = await _context.Products
+            return await _context.Products
                 .Include(x => x.Category)
+                .Select(productModel => new ProductModel
+                {
+	                Id = productModel.Id,
+	                Name = productModel.Name,
+	                Price = productModel.Price,
+	                Count = productModel.Count,
+	                SKU = productModel.SKU,
+	                CategoryId = productModel.CategoryId,
+	                CategoryName = productModel.Category.Name
+                })
                 .FirstOrDefaultAsync(x => x.Id == id);
-            var product = new ProductModel
-            {
-                Id = productModel.Id,
-                Name = productModel.Name,
-                Price = productModel.Price,
-                Count = productModel.Count,
-                SKU = productModel.SKU,
-                CategoryId = productModel.CategoryId,
-                CategoryName = productModel.Category.Name
-            };
-            return product;
-        }
-
-        public async Task<bool> ProductExistsAsync(int? id)
-        {
-            return await _context.Products.AnyAsync(e => e.Id == id);
         }
 
         public async Task<ProductModel> UpdateAsync(ProductModel productModel)
@@ -107,19 +101,22 @@ namespace Shop.Repositories.Implementations
         {
             var products = _context.Products.AsQueryable().AsNoTracking();
 
-            if (!String.IsNullOrWhiteSpace(criteria.SearchString))
+            if (criteria != null)
             {
-                products = products.Where(prod => prod.Name.Contains(criteria.SearchString));
-            }
+	            if (!String.IsNullOrWhiteSpace(criteria.SearchString))
+	            {
+		            products = products.Where(prod => prod.Name.Contains(criteria.SearchString));
+	            }
 
-            if (criteria.CategoryId.HasValue)
-            {
-                products = products.Where(prod => prod.CategoryId == criteria.CategoryId);
-            }
+	            if (criteria.CategoryId.HasValue)
+	            {
+		            products = products.Where(prod => prod.CategoryId == criteria.CategoryId);
+	            }
 
-            if (criteria.MinValue >= 0 && criteria.MaxValue > 0)
-            {
-                products = products.Where(prod => prod.Price >= criteria.MinValue && prod.Price <= criteria.MaxValue);
+	            if (criteria.MinValue >= 0 && criteria.MaxValue > 0)
+	            {
+		            products = products.Where(prod => prod.Price >= criteria.MinValue && prod.Price <= criteria.MaxValue);
+	            }
             }
 
             return await products
