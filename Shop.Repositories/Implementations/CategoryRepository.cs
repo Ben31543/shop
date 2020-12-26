@@ -43,17 +43,17 @@ namespace Shop.Repositories.Implementations
             _context.Categories.Remove(categoryModel);
             await _context.SaveChangesAsync();
         }
-         
+
         public async Task<List<CategoryModel>> GetAllAsync()
         {
             return await _context
                 .Categories
-                .Include(x=>x.Products)
+                .Include(x => x.Products)
                 .Select(s => new CategoryModel
                 {
                     Name = s.Name,
                     Id = s.Id,
-                    ProductsCount=s.Products.Count
+                    ProductsCount = s.Products.Count
                 })
                 .ToListAsync();
         }
@@ -64,7 +64,8 @@ namespace Shop.Repositories.Implementations
             var category = new CategoryModel
             {
                 Id = categoryModel.Id,
-                Name = categoryModel.Name
+                Name = categoryModel.Name,
+                ProductsCount = categoryModel.Products.Count
             };
             return category;
         }
@@ -73,8 +74,8 @@ namespace Shop.Repositories.Implementations
         {
             var category = new Category
             {
-                Name = categoryModel.Name,
-                Id=categoryModel.Id
+                Id = categoryModel.Id,
+                Name = categoryModel.Name
             };
             _context.Update(category);
             await _context.SaveChangesAsync();

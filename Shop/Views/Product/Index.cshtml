@@ -10,12 +10,14 @@
 
     th {
         background-color: #212F3C;
-        color: cornsilk;
-    }
-
-    th {
         font-style: oblique;
         font-variant: normal;
+        color: cornsilk;
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
     }
 </style>
 
@@ -25,7 +27,6 @@
 @using (Html.BeginForm("Search", "Product", null, FormMethod.Post))
 {
 <div class="form-inline form-group">
-
     <label>Product:</label><br><br>
     @Html.TextBoxFor(s => s.SearchCriteria.SearchString, null, new { @class = "form-control", size = "10" })
 
