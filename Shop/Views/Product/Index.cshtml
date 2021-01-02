@@ -3,43 +3,31 @@
 @{ ViewData["Title"] = "Index"; }
 
 
-<style>
-    table, th, td {
-        border: 2px solid black;
-    }
-
-    th {
-        background-color: #212F3C;
-        font-style: oblique;
-        font-variant: normal;
-        color: cornsilk;
-        text-align: center;
-    }
-
-    td {
-        text-align: center;
-    }
-</style>
-
+<head>
+    <link rel="stylesheet" href="~/css/TablesView.css">
+</head>
 
 <h1>Products</h1>
 
 @using (Html.BeginForm("Search", "Product", null, FormMethod.Post))
 {
 <div class="form-inline form-group">
-    <label>Product:</label><br><br>
-    @Html.TextBoxFor(s => s.SearchCriteria.SearchString, null, new { @class = "form-control", size = "10" })
 
-    <label>Category: </label><br><br>
+    <label style="margin:15px; text-align: right" >Product</label>
+    @Html.TextBoxFor(s => s.SearchCriteria.SearchString, null, new { @class = "form-control", size = "10"})
+
+    <label style="margin:15px;">Category </label>
     @Html.DropDownListFor(s => s.SearchCriteria.CategoryId, (SelectList)ViewData["Categories"], "All", new { @class = "form-control" })
 
-    <label>Min Price: </label><br><br>
+    <label style="margin:15px;">Min Price: </label>
     @Html.TextBoxFor(s => s.SearchCriteria.MinValue, null, new { @class = "form-control", size = "2" })
 
-    <label>Max Price: </label><br><br>
+    <label style="margin:5px;">Max Price: </label>
     @Html.TextBoxFor(s => s.SearchCriteria.MaxValue, null, new { @class = "form-control", size = "2" })
 
-    <br><br><input type="submit" value="Filter" class="btn btn-dark" />
+    <input type="submit" value="🔍" class="btn btn-dark" style="margin:15px;" />
+
+    <a asp-action="Create" class="btn btn-dark" style="float: right;">+</a>
 </div>}
 
 
@@ -78,9 +66,7 @@
         <a asp-action="Details" asp-route-id="@item.Id" title="Id: @item.Id &#10;Product Name: @item.Name &#10;Category: @item.CategoryName">Details</a> |
         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
     </td>
-</tr>}
+</tr>
+}
     </tbody>
-    <p>
-        <a asp-action="Create" class="btn btn-dark">Add new product</a>
-    </p>
 </table>

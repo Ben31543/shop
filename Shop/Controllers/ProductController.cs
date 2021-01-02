@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 using Shop.Repositories.Data;
-using Shop.Repositories.Implementations;
 using Shop.Repositories.Interfaces;
 
 namespace Shop.Controllers
@@ -33,7 +29,7 @@ namespace Shop.Controllers
 
             var model = new ProductPageModel
             {
-                SearchCriteria = new ProductCriteria(),
+                SearchCriteria = new ProductCriteriaModrl(),
                 Products = products
             };
 
@@ -48,11 +44,6 @@ namespace Shop.Controllers
             model.Products = await _productRepository.GeneralFilterAsync(model.SearchCriteria);
             
             return View("Index", model);
-        }
-
-        public async Task<IActionResult> Shopping()
-        {
-            return View(await _productRepository.GetAllAsync());
         }
 
         public async Task<IActionResult> Details(int? id)

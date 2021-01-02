@@ -10,6 +10,6 @@ namespace Shop.Models
     {
         public List<ProductModel> Products { get; set; }
 
-        public ProductCriteria SearchCriteria { get; set; }
+        public ProductCriteriaModrl SearchCriteria { get; set; }
     }
 }

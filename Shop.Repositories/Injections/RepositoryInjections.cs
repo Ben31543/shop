@@ -13,6 +13,7 @@ namespace Shop.Repositories.Injections
         {
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IShopViewRepository, ShopViewRepository>();
         }
     }
 }

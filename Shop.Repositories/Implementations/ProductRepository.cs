@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 using Shop.Repositories.Data;
 using Shop.Repositories.Entities;
@@ -7,9 +6,7 @@ using Shop.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Shop.Repositories.Implementations
@@ -97,7 +94,7 @@ namespace Shop.Repositories.Implementations
             return productModel;
         }
 
-        public async Task<List<ProductModel>> GeneralFilterAsync(ProductCriteria criteria)
+        public async Task<List<ProductModel>> GeneralFilterAsync(ProductCriteriaModrl criteria)
         {
             var products = _context.Products.AsQueryable().AsNoTracking();
 
