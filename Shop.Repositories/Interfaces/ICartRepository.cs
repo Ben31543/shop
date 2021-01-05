@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Shop.Repositories.Interfaces
 {
-    public interface IShopViewRepository
+    public interface ICartRepository
     {
-        Task<List<ProductShopModel>> GetAllAsync();
+        Task AddToCart(ProductModel model, int productCount);
+        Task<List<CartItemModel>> CartView();
     }
 }

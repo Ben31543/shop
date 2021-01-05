@@ -13,8 +13,8 @@
 {
 <div class="form-inline form-group">
 
-    <label style="margin:15px; text-align: right" >Product</label>
-    @Html.TextBoxFor(s => s.SearchCriteria.SearchString, null, new { @class = "form-control", size = "10"})
+    <label style="margin:15px; text-align: right">Product</label>
+    @Html.TextBoxFor(s => s.SearchCriteria.SearchString, null, new { @class = "form-control", size = "10" })
 
     <label style="margin:15px;">Category </label>
     @Html.DropDownListFor(s => s.SearchCriteria.CategoryId, (SelectList)ViewData["Categories"], "All", new { @class = "form-control" })
@@ -59,14 +59,13 @@
         @Html.DisplayFor(modelItem => item.CategoryName)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.Price)
+        @String.Format("{0:0.##}", item.Price) ֏
     </td>
     <td>
         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
         <a asp-action="Details" asp-route-id="@item.Id" title="Id: @item.Id &#10;Product Name: @item.Name &#10;Category: @item.CategoryName">Details</a> |
         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
     </td>
-</tr>
-}
+</tr>}
     </tbody>
 </table>

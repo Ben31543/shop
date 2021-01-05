@@ -1,6 +1,6 @@
 ﻿namespace Shop.Models
 {
-    public class ProductCriteriaModrl
+    public class ProductCriteriaModel
 	{
 		public string SearchString { get; set; }
 		public int? CategoryId { get; set; }

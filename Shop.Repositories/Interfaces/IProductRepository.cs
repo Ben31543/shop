@@ -13,6 +13,6 @@ namespace Shop.Repositories.Interfaces
         Task DeleteAsync(int? id);
         Task<ProductModel> UpdateAsync(ProductModel productModel);
         Task<ProductModel> CreateAsync(ProductModel productModel);
-        Task<List<ProductModel>> GeneralFilterAsync(ProductCriteriaModrl criteria);
+        Task<List<ProductModel>> GeneralFilterAsync(ProductCriteriaModel criteria);
     }
 }

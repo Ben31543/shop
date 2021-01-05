@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shop.Models;
 using Shop.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,16 +10,16 @@ namespace Shop.Controllers
 {
     public class ShopController : Controller
     {
-        private readonly IShopViewRepository _viewRepository;
-        
-        public ShopController(IShopViewRepository viewRepository)
+        private readonly IProductRepository _productRepository;
+
+        public ShopController(IProductRepository productRepository)
         {
-            _viewRepository = viewRepository;
+            _productRepository = productRepository;
         }
-        
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Products()
         {
-            return View(await _viewRepository.GetAllAsync());
+            return View(await _productRepository.GetAllAsync());
         }
     }
 }

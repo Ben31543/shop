@@ -19,6 +19,7 @@ namespace Shop.Repositories.Implementations
         {
             _context = context;
         }
+
         public async Task<ProductModel> CreateAsync(ProductModel productModel)
         {
             var product = new Product
@@ -94,7 +95,7 @@ namespace Shop.Repositories.Implementations
             return productModel;
         }
 
-        public async Task<List<ProductModel>> GeneralFilterAsync(ProductCriteriaModrl criteria)
+        public async Task<List<ProductModel>> GeneralFilterAsync(ProductCriteriaModel criteria)
         {
             var products = _context.Products.AsQueryable().AsNoTracking();
 

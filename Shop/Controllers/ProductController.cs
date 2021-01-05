@@ -29,7 +29,7 @@ namespace Shop.Controllers
 
             var model = new ProductPageModel
             {
-                SearchCriteria = new ProductCriteriaModrl(),
+                SearchCriteria = new ProductCriteriaModel(),
                 Products = products
             };
 

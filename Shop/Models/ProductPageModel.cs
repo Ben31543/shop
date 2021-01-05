@@ -1,8 +1,4 @@
-﻿using Shop.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Shop.Models
 {
@@ -10,6 +6,6 @@ namespace Shop.Models
     {
         public List<ProductModel> Products { get; set; }
 
-        public ProductCriteriaModrl SearchCriteria { get; set; }
+        public ProductCriteriaModel SearchCriteria { get; set; }
     }
 }

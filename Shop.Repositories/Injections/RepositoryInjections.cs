@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shop.Repositories.Implementations;
 using Shop.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shop.Repositories.Injections
 {
@@ -13,7 +10,7 @@ namespace Shop.Repositories.Injections
         {
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<IShopViewRepository, ShopViewRepository>();
+            services.AddTransient<ICartRepository, CartRepository>();
         }
     }
 }
