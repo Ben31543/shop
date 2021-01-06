@@ -17,16 +17,22 @@ namespace Shop.Controllers
             _cartRepository = cartRepository;
         }
 
+        [HttpPost]
         public async Task<IActionResult> AddToCart(ProductModel model, int productCount)
         {
             await _cartRepository.AddToCart(model, productCount);
             return View();
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
-            var cartItems = await _cartRepository.CartView();
-            return View(cartItems);
+	        CartModel model = new CartModel
+	        {
+		        Products = await _cartRepository.CartViewAsync()
+	        };
+
+			return View(model);
         }
+
     }
 }

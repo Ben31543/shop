@@ -21,9 +21,5 @@ namespace Shop.Repositories.Entities
 		public int CategoryId { get; set; }
 
 		public Category Category { get; set; }
-
-        public int CartId { get; set; }
-
-        public Cart Cart { get; set; }
     }
 }

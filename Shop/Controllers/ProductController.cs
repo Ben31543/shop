@@ -25,6 +25,7 @@ namespace Shop.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Categories"] = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+            //ViewBag.Categories = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
             var products = await _productRepository.GetAllAsync();
 
             var model = new ProductPageModel

@@ -11,11 +11,13 @@ namespace Shop.Repositories.Entities
         [Key]
         public int Id { get; set; }
 
-        public string ProductName { get; set; }
+        public int ProductId { get; set; }
 
-        public List<Product> Products { get; set; }
+        public int? UserId { get; set; }
 
-        public decimal TotalSum { get; set; }
+        public int Count { get; set; }     
+
+        public Product Product { get; set; }
 
         public DateTime DateAdded { get; set; }
     }
