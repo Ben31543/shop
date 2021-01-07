@@ -8,7 +8,7 @@ namespace Shop.Repositories.Interfaces
 {
     public interface ICartRepository
     {
-        Task AddToCart(ProductModel model, int productCount);
+        Task AddToCartAsync(ProductModel model, int productCount);
         Task<List<CartItemModel>> CartViewAsync();
     }
 }

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Shop.Repositories.Migrations
 {
-    public partial class EntityAdded : Migration
+    public partial class CartEntityType : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,6 +43,32 @@ namespace Shop.Repositories.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(nullable: false),
+                    Count = table.Column<int>(nullable: false),
+                    DateAdded = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cart_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_ProductId",
+                table: "Cart",
+                column: "ProductId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
@@ -50,6 +77,9 @@ namespace Shop.Repositories.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Cart");
+
             migrationBuilder.DropTable(
                 name: "Products");
 

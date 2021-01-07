@@ -11,17 +11,22 @@ namespace Shop.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IProductRepository _productRepository;
 
-        public CartController(ICartRepository cartRepository)
+        public CartController(ICartRepository cartRepository, IProductRepository productRepository)
         {
             _cartRepository = cartRepository;
+            _productRepository = productRepository;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToCart(ProductModel model, int productCount)
         {
-            await _cartRepository.AddToCart(model, productCount);
-            return View();
+            var product = await _productRepository.GetAsync(model.Id);
+
+            await _cartRepository.AddToCartAsync(product, productCount);
+
+            return RedirectToAction("Products", "Shop");
         }
 
         public async Task<IActionResult> Index()
@@ -33,6 +38,5 @@ namespace Shop.Controllers
 
 			return View(model);
         }
-
     }
 }

@@ -11,40 +11,39 @@ using Shop.Repositories.Entities;
 
 namespace Shop.Repositories.Implementations
 {
-	public class CartRepository : ICartRepository
-	{
-		private readonly ShopContext _context;
+    public class CartRepository : ICartRepository
+    {
+        private readonly ShopContext _context;
 
-		public CartRepository(ShopContext context)
-		{
-			_context = context;
-		}
+        public CartRepository(ShopContext context)
+        {
+            _context = context;
+        }
 
-		public async Task AddToCart(ProductModel model, int productCount)
-		{
-			var cartItem = new Cart
-			{
-				ProductId = model.Id,
-				Count = productCount,
-				DateAdded = DateTime.Now
-			};
+        public async Task AddToCartAsync(ProductModel model, int productCount)
+        {
+            var cartItem = new Cart
+            {
+                ProductId = model.Id,
+                Count = productCount,
+                DateAdded = DateTime.Now
+            };
 
-			_context.Add(cartItem);
-			await _context.SaveChangesAsync();
-		}
+            _context.Add(cartItem);
+            await _context.SaveChangesAsync();
+        }
 
-		public async Task<List<CartItemModel>> CartViewAsync()
-		{
-			return null;
-			//return await _context.Cart
-			//    .Include(x => x.Products)
-			//    .Select(product => new CartItemModel
-			//    {
-			//        Name = product.ProductName,
-			//        Count = product.Products.Count,
-			//        Price = product.TotalSum
-			//    })
-			//    .ToListAsync();
-		}
-	}
+        public async Task<List<CartItemModel>> CartViewAsync()
+        {
+            return await _context.Cart
+                .Include(x => x.Product)
+                .Select(x => new CartItemModel
+                {
+                    Count = x.Count,
+                    ProductId = x.ProductId,
+                    Name = x.Product.Name,
+                    Price = x.Product.Price
+                }).ToListAsync();
+        }
+    }
 }

@@ -26,16 +26,18 @@ namespace Shop.Repositories.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TotalSum")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Cart");
                 });
@@ -62,9 +64,6 @@ namespace Shop.Repositories.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -82,21 +81,22 @@ namespace Shop.Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
-
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Shop.Repositories.Entities.Product", b =>
+            modelBuilder.Entity("Shop.Repositories.Entities.Cart", b =>
                 {
-                    b.HasOne("Shop.Repositories.Entities.Cart", "Cart")
-                        .WithMany("Products")
-                        .HasForeignKey("CartId")
+                    b.HasOne("Shop.Repositories.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
+            modelBuilder.Entity("Shop.Repositories.Entities.Product", b =>
+                {
                     b.HasOne("Shop.Repositories.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")

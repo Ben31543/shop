@@ -1,10 +1,6 @@
 ﻿@model CartModel
 
-@*@section HeaderYesiminch
-{
-	
-}*@
-<h1>Cart</h1>
+<h1>🛒</h1>
 
 <table class="table">
     <thead>
@@ -18,33 +14,28 @@
             <th>
                 Selected Count
             </th>
-            <th>
-                Addition Time
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @if (Model?.Products != null)
+        @foreach (var item in Model.Products)
         {
-	        foreach (var item in Model.Products)
-	        {
-		        <tr>
-			        <td>
-				        @Html.DisplayFor(modelItem => item.Product.Name)
-			        </td>
-			        <td>
-				        @Html.DisplayFor(modelItem => item.Product.Price)
-			        </td>
-			        <td>
-				        @Html.DisplayFor(modelItem => item.Count)
-			        </td>
-			        <td>
-				        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-				        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-			        </td>
-		        </tr>
-	        }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @String.Format("{0:0.##}", item.Price) ֏
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+Total Sum: @String.Format("{0:0.##}", Model.TotalSum) ֏

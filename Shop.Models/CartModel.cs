@@ -7,6 +7,6 @@ namespace Shop.Models
     {
         public List<CartItemModel> Products { get; set; }
 
-        public decimal TotalSum => Products?.Sum(s => s.Product.Price) ?? 0;
+        public decimal? TotalSum => Products?.Sum(s => s.Price) ?? 0;
     }
 }
