@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Shop.Repositories.Migrations
 {
-    public partial class CartEntityType : Migration
+    public partial class CartEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,9 +48,8 @@ namespace Shop.Repositories.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(nullable: false),
                     Count = table.Column<int>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false)
+                    ProductId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,7 +65,8 @@ namespace Shop.Repositories.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Cart_ProductId",
                 table: "Cart",
-                column: "ProductId");
+                column: "ProductId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",

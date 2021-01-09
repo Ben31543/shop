@@ -10,8 +10,8 @@ using Shop.Repositories.Data;
 namespace Shop.Repositories.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20210106171704_CartEntityType")]
-    partial class CartEntityType
+    [Migration("20210109082520_CartEntity")]
+    partial class CartEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,15 +31,13 @@ namespace Shop.Repositories.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.ToTable("Cart");
                 });
@@ -91,8 +89,8 @@ namespace Shop.Repositories.Migrations
             modelBuilder.Entity("Shop.Repositories.Entities.Cart", b =>
                 {
                     b.HasOne("Shop.Repositories.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
+                        .WithOne("Cart")
+                        .HasForeignKey("Shop.Repositories.Entities.Cart", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

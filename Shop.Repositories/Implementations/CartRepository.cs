@@ -2,10 +2,8 @@
 using Shop.Models;
 using Shop.Repositories.Data;
 using Shop.Repositories.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Shop.Repositories.Entities;
 
@@ -25,8 +23,7 @@ namespace Shop.Repositories.Implementations
             var cartItem = new Cart
             {
                 ProductId = model.Id,
-                Count = productCount,
-                DateAdded = DateTime.Now
+                Count = productCount
             };
 
             _context.Add(cartItem);
@@ -39,11 +36,51 @@ namespace Shop.Repositories.Implementations
                 .Include(x => x.Product)
                 .Select(x => new CartItemModel
                 {
+                    Id = x.Id,
                     Count = x.Count,
                     ProductId = x.ProductId,
                     Name = x.Product.Name,
                     Price = x.Product.Price
-                }).ToListAsync();
+                })
+                .ToListAsync();
+        }
+
+        public async Task DeleteAsync(int? id)
+        {
+            var cartItemModel = await _context.Cart.FindAsync(id);
+            _context.Cart.Remove(cartItemModel);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<CartItemModel> GetCartItemAsync(int? id)
+        {
+            var cartItem = await _context.Cart
+                .Include(x => x.Product)
+                .Select(x => new CartItemModel
+                {
+                    Id = x.Id,
+                    Name = x.Product.Name,
+                    Count = x.Count,
+                    Price = x.Product.Price,
+                    ProductId = x.ProductId
+                })
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return cartItem;
+        }
+
+        public async Task<CartItemModel> UpdateAsync(CartItemModel cartModel)
+        {
+            var cart = new Cart
+            {
+                //Id = cartModel.Id,
+                Count = cartModel.Count,
+                ProductId = cartModel.ProductId
+            };
+
+            _context.Update(cart);
+            await _context.SaveChangesAsync();
+            return cartModel;
         }
     }
 }

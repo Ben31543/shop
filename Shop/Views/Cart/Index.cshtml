@@ -1,6 +1,6 @@
 ﻿@model CartModel
 
-<h1>🛒</h1>
+<h1>🛒 Shopping Cart</h1>
 
 <table class="table">
     <thead>
@@ -22,17 +22,17 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @item.Name
                 </td>
                 <td>
                     @String.Format("{0:0.##}", item.Price) ֏
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Count)
+                    @item.Count
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>  |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }

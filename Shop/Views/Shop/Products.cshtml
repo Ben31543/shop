@@ -1,38 +1,59 @@
-﻿@model List<ProductModel>
+﻿@model ProductPageModel
 
 <html>
 <head>
     <link rel="stylesheet" href="~/css/ShopView.css">
 </head>
+
+@using (Html.BeginForm("Search", "Shop", null, FormMethod.Post))
+{
+<div class="form-inline form-group">
+
+    <label style="margin:15px; text-align: right">Search By Name</label>
+    @Html.TextBoxFor(s => s.SearchCriteria.SearchString, null, new { @class = "form-control", size = "10" })
+
+    <label style="margin:15px;">Category </label>
+    @Html.DropDownListFor(s => s.SearchCriteria.CategoryId, (SelectList)ViewData["Categories"], "All", new { @class = "form-control" })
+
+    <label style="margin:15px;">Min Price: </label>
+    @Html.TextBoxFor(s => s.SearchCriteria.MinValue, null, new { @class = "form-control", size = "2" })
+
+    <label style="margin:5px;">Max Price: </label>
+    @Html.TextBoxFor(s => s.SearchCriteria.MaxValue, null, new { @class = "form-control", size = "2" })
+
+    <input type="submit" value="🔍" class="btn btn-dark" style="margin:15px;" />
+</div>
+}
+
 <body>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Products)
     {
-	    <div class="box">
-			<form asp-action="AddToCart" asp-controller="Cart" method="post">
-				<input type="hidden" name="Id" value="@item.Id" />
+        <div class="box">
+            <form asp-action="AddToCart" asp-controller="Cart" method="post">
+                <input type="hidden" name="Id" value="@item.Id" />
 
-				<span>
-					<img src="~/img/products.jpg" style="width: 65%">
-				</span>
+                <span>
+                    <img src="~/img/products.jpg" style="width: 65%">
+                </span>
 
-				<span>
-					<h2>@item.Name</h2>
-				</span>
+                <span>
+                    <h2>@item.Name</h2>
+                </span>
 
-				<span class="text-black-50" style="font-size: 20px">
-					<h3>@item.CategoryName</h3>
-				</span>
+                <span class="text-black-50" style="font-size: 20px">
+                    <h3>@item.CategoryName</h3>
+                </span>
 
-				<span>
-					<h4>Price: @String.Format("{0:0.##}", item.Price) ֏</h4>
-				</span>
+                <span>
+                    <h4>Price: @String.Format("{0:0.##}", item.Price) ֏</h4>
+                </span>
 
-				<span>
-					<input type="number" name="productCount">
-					<input type="submit" value="Add To Cart" />
-				</span>
-			</form>
-	    </div>
+                <span>
+                    <input type="number" name="productCount">
+                    <input type="submit" value="Add To Cart" />
+                </span>
+            </form>
+        </div>
     }
 </body>
 </html>
