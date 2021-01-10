@@ -61,24 +61,16 @@ namespace Shop.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Count,Product,ProductId")] CartItemModel cartItemModel)
+        public async Task<IActionResult> Edit(CartItemModel cartItemModel)
         {
-            if (id != cartItemModel.Id)
+            if (cartItemModel.Id <= 0)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _cartRepository.UpdateAsync(cartItemModel);
-                }
-
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+	            await _cartRepository.UpdateAsync(cartItemModel);
 
                 return RedirectToAction(nameof(Index));
             }

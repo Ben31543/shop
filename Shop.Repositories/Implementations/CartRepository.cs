@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 using Shop.Repositories.Data;
 using Shop.Repositories.Interfaces;
@@ -73,14 +74,27 @@ namespace Shop.Repositories.Implementations
         {
             var cart = new Cart
             {
-                //Id = cartModel.Id,
-                Count = cartModel.Count,
-                ProductId = cartModel.ProductId
+                Id = cartModel.Id,
             };
 
-            _context.Update(cart);
+            _context.Attach(cart);
+            cart.Count = cartModel.Count;
             await _context.SaveChangesAsync();
             return cartModel;
+        }
+
+        public async Task<CartItemModel> UpdateAsync1(CartItemModel cartModel)
+        {
+	        var cart = await _context.Cart.FirstOrDefaultAsync(s => s.Id == cartModel.Id);
+
+	        if (cart == null)
+	        {
+		        throw new ArgumentException();
+	        }
+
+	        cart.Count = cartModel.Count;
+	        await _context.SaveChangesAsync();
+	        return cartModel;
         }
     }
 }
