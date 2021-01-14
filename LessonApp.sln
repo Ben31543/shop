@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop", "Shop\Shop.csproj", "{9E365D6F-68B6-44F9-92B2-8DCCB8DE70A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop", "Shop\Shop.csproj", "{9E365D6F-68B6-44F9-92B2-8DCCB8DE70A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Models", "Shop.Models\Shop.Models.csproj", "{E7E3243B-48BA-4C33-AD63-5F2D488D1A6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.Models", "Shop.Models\Shop.Models.csproj", "{E7E3243B-48BA-4C33-AD63-5F2D488D1A6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Repositories", "Shop.Repositories\Shop.Repositories.csproj", "{FA8038B3-FAD7-446C-B358-7E8C395B2A64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.Repositories", "Shop.Repositories\Shop.Repositories.csproj", "{FA8038B3-FAD7-446C-B358-7E8C395B2A64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Admin", "Shop.Admin\Shop.Admin.csproj", "{3641F1B1-2095-447E-A097-E1ED23B2ECC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{FA8038B3-FAD7-446C-B358-7E8C395B2A64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA8038B3-FAD7-446C-B358-7E8C395B2A64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA8038B3-FAD7-446C-B358-7E8C395B2A64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3641F1B1-2095-447E-A097-E1ED23B2ECC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3641F1B1-2095-447E-A097-E1ED23B2ECC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3641F1B1-2095-447E-A097-E1ED23B2ECC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3641F1B1-2095-447E-A097-E1ED23B2ECC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

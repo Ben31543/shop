@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Shop.Models;
-using Shop.Repositories.Data;
 using Shop.Repositories.Interfaces;
 
 namespace Shop.Controllers
@@ -20,11 +13,6 @@ namespace Shop.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(await _categoryRepository.GetAllAsync());
-        }
-
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) 
@@ -36,91 +24,6 @@ namespace Shop.Controllers
                 return NotFound();
 
             return View(categoryModel);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] CategoryModel categoryModel)
-        {
-            if (ModelState.IsValid)
-            {
-                await _categoryRepository.CreateAsync(categoryModel);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(categoryModel);
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var categoryModel = await _categoryRepository.GetAsync(id);
-
-            if (categoryModel == null)
-                return NotFound();
-
-            return View(categoryModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] CategoryModel categoryModel)
-        {
-            if (id != categoryModel.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await _categoryRepository.UpdateAsync(categoryModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!(await CategoryModelExists(categoryModel.Id)))
-                    {
-                        return NotFound();
-                    }
-
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(categoryModel);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var categoryModel = await _categoryRepository.GetAsync(id);
-
-            if (categoryModel == null)
-                return NotFound();
-
-            return View(categoryModel);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            await _categoryRepository.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
-        }
-
-        private async Task<bool> CategoryModelExists(int id)
-        {
-            return await _categoryRepository.CategoryExistsAsync(id);
         }
     }
 }

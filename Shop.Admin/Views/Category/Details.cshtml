@@ -1,12 +1,11 @@
 ﻿@model Shop.Models.CategoryModel
 
-@{
-    ViewData["Title"] = "Details";
-}
+@{ ViewData["Title"] = "Details"; }
 
 <h1>Details</h1>
 
 <div>
+    <hr />
     <dl class="row">
         <dt class="col-sm-2">
             Category Name
@@ -17,5 +16,6 @@
     </dl>
 </div>
 <div>
-    <a asp-controller="Shop" asp-action="Products">Go Back</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

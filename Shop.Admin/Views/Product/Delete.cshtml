@@ -1,8 +1,6 @@
 ﻿@model Shop.Models.ProductModel
 
-@{
-    ViewData["Title"] = "Delete";
-}
+@{ ViewData["Title"] = "Delete"; }
 
 <h2>Are you sure you want to remove this product from the list?</h2>
 <div>
@@ -34,7 +32,7 @@
             @Html.DisplayFor(model => model.SKU)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

@@ -1,4 +1,4 @@
-﻿@model ProductPageModel
+﻿@model Shop.Models.ProductPageModel
 
 @{ ViewData["Title"] = "Index"; }
 
@@ -66,6 +66,7 @@
         <a asp-action="Details" asp-route-id="@item.Id" title="Id: @item.Id &#10;Product Name: @item.Name &#10;Category: @item.CategoryName">Details</a> |
         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
     </td>
-</tr>}
+</tr>
+}
     </tbody>
 </table>

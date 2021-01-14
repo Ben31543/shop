@@ -72,29 +72,16 @@ namespace Shop.Repositories.Implementations
 
         public async Task<CartItemModel> UpdateAsync(CartItemModel cartModel)
         {
-            var cart = new Cart
-            {
-                Id = cartModel.Id,
-            };
+            var cart = await _context.Cart.FirstOrDefaultAsync(s => s.Id == cartModel.Id);
 
-            _context.Attach(cart);
+            if (cart == null)
+            {
+                throw new ArgumentException();
+            }
+
             cart.Count = cartModel.Count;
             await _context.SaveChangesAsync();
             return cartModel;
-        }
-
-        public async Task<CartItemModel> UpdateAsync1(CartItemModel cartModel)
-        {
-	        var cart = await _context.Cart.FirstOrDefaultAsync(s => s.Id == cartModel.Id);
-
-	        if (cart == null)
-	        {
-		        throw new ArgumentException();
-	        }
-
-	        cart.Count = cartModel.Count;
-	        await _context.SaveChangesAsync();
-	        return cartModel;
         }
     }
 }

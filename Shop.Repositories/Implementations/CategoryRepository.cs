@@ -2,10 +2,8 @@
 using Shop.Models;
 using Shop.Repositories.Data;
 using Shop.Repositories.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Shop.Repositories.Entities;
 
@@ -52,8 +50,7 @@ namespace Shop.Repositories.Implementations
                 .Select(s => new CategoryModel
                 {
                     Name = s.Name,
-                    Id = s.Id,
-                    ProductsCount = s.Products.Count
+                    Id = s.Id
                 })
                 .ToListAsync();
         }
@@ -61,12 +58,13 @@ namespace Shop.Repositories.Implementations
         public async Task<CategoryModel> GetAsync(int? id)
         {
             var categoryModel = await _context.Categories.FindAsync(id);
+
             var category = new CategoryModel
             {
                 Id = categoryModel.Id,
-                Name = categoryModel.Name,
-                ProductsCount = categoryModel.Products.Count
+                Name = categoryModel.Name
             };
+
             return category;
         }
 
