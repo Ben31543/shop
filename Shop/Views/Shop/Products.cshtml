@@ -34,7 +34,14 @@
 
                 <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
                     <span>
-                        <img src="~/img/products.jpg" style="width: 65%">
+                        @if (item.CategoryName == "Chocolates and Sweets")
+                        {
+                            <img src="~/img/chocolade_bar.jpg" style="width: 65%">
+                        }
+                        else if (item.CategoryName == "Alcohol Drinks")
+                        {
+                            <img src="~/img/alcohol-icon-11.jpg" style="width: 65%">
+                        }
                         <h2>@item.Name</h2>
                     </span>
                 </a>
@@ -50,7 +57,7 @@
                 </span>
 
                 <span>
-                    <input type="number" name="productCount">
+                    <input type="number" name="productCount" min="1", max="@item.Count">
                     <input type="submit" value="Add To Cart" />
                 </span>
             </form>

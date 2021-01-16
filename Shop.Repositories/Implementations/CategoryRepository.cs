@@ -29,6 +29,7 @@ namespace Shop.Repositories.Implementations
             {
                 Name = categoryModel.Name,
             };
+
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
             categoryModel.Id = category.Id;

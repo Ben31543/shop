@@ -35,11 +35,11 @@
     display: inline-block;
     width: 300px;
     height: 350px;
-    background-color: #F5FBEF;
+    background-color: #004E7C;
     text-align: center;
     vertical-align: top;
     float: none;
-    align-self:auto;
+    align-self: auto;
 }
 
 .control-label {
